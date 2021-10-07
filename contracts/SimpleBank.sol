@@ -65,6 +65,7 @@ contract SimpleBank {
     function enroll() public returns (bool){
       // 1. enroll of the sender of this transaction
       enrolled[msg.sender]=true;
+      return true;
     }
 
     /// @notice Deposit ether into bank
@@ -93,7 +94,8 @@ balance[msg.sender]+=msg.value;
       require(balance[msg.sender] >= withdrawAmount, "insufficiant balance");
       // Subtract the amount from the sender's balance, and try to send that amount of ether
       balance[msg.sender]-=withdrawAmount;
-(bool sent, bytes memory data) = msg.sender.call{value: withdrawAmount}("");
+(bool sent, bytes memory data) = msg.sender.call.value 
+(withdrawAmount)("");
         require(sent, "Failed to send Ether");
       // to the user attempting to withdraw. 
       // return the user's balance.
