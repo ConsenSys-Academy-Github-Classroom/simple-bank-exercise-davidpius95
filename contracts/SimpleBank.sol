@@ -56,7 +56,7 @@ contract SimpleBank {
       // 1. A SPECIAL KEYWORD prevents function from editing state variables;
       //    allows function to run locally/off blockchain
       // 2. Get the balance of the sender of this transaction
-      return balance[msg.sender];
+      return balances[msg.sender];
     }
 
     /// @notice Enroll a customer with the bank
@@ -75,14 +75,14 @@ contract SimpleBank {
     require(enrolled[msg.sender]==true, "User has not enrolled");
 
       // 2. Users should be enrolled before they can make deposits
-balance[msg.sender]+=msg.value;
+balances[msg.sender]+=msg.value;
       // 3. Add the amount to the user's balance. Hint: the amount can be
       //    accessed from of the global variable `msg`
 
       // 4. Emit the appropriate event associated with this function
       emit LogDepositMade(msg.sender,msg.value);
       // 5. return the balance of sndr of this transaction
-      return balance[msg.sender];
+      return balances[msg.sender];
     } 
 
     /// @notice Withdraw ether from bank
@@ -91,16 +91,15 @@ balance[msg.sender]+=msg.value;
     /// @return The balance remaining for the user
     function withdraw(uint withdrawAmount) public returns (uint) {
       // If the sender's balance is at least the amount they want to withdraw,
-      require(balance[msg.sender] >= withdrawAmount, "insufficiant balance");
+      require(balances[msg.sender] >= withdrawAmount, "insufficiant balance");
       // Subtract the amount from the sender's balance, and try to send that amount of ether
-      balance[msg.sender]-=withdrawAmount;
+      balances[msg.sender]-=withdrawAmount;
 (bool sent, bytes memory data) = msg.sender.call.value 
 (withdrawAmount)("");
         require(sent, "Failed to send Ether");
       // to the user attempting to withdraw. 
-      // return the user's balance.
-uint newBalance = balance[msg.sender];
-return newBalance;
+      // return the user's balance. 
+return balances[msg.sender];
       // 1. Use a require expression to guard/ensure sender has enough funds
 
       // 2. Transfer Eth to the sender and decrement the withdrawal amount from
